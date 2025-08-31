@@ -4,19 +4,15 @@ import dotenv from "dotenv";
 import { requireAuth } from "@clerk/clerk-sdk-node";
 import User from "./models/User.js";
 import webhookRouter from "./routes/webhook.js";
+import connectDB from "./connectDB.js";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-// ✅ MongoDB Connect
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-    .then(() => console.log("MongoDB Connected"))
-    .catch((err) => console.error("MongoDB Error:", err));
+
+connectDB()
 
 // ✅ Webhook route (Clerk → Mongo sync)
 app.use("/api", webhookRouter);
